@@ -1,4 +1,4 @@
-package Images;
+package week1;
 import edu.duke.*;
 import java.io.File;
 

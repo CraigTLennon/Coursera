@@ -1,4 +1,4 @@
-package Images;
+package week1;
 
 import java.io.File;
 
