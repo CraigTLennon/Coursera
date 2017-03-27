@@ -1,0 +1,19 @@
+Baby name project
+Notes bet yob and name
+look up pop of name in given yob
+look up similar pop name in other yob
+file name format is "yobxxxx.txt (csv)
+Number of named babies listed, not ranks, and all female bf all male
+so need to checkwhen increase starts
+
+First field name, second gender, third numborn, 
+note use file.getCSVParser(false) bc no header row
+methods:
+total Births print # girl names, # boy names, #total names
+getRank, year namd gender
+return int which is rank unless not listed then #-1
+getName year, rank, gender, name return person at that rank for that gener or no name
+name in year(name, year, new year, gender)return string name, call get rank then get name
+yearHigestRank(name, gender) returns integer, year in which rank was highest
+get average rank(name gender) select files return avg rank over specified files, -1 if ot in any
+getTotalBirthsRankedHiger(year, name, gender) total num births ranked above name. // use get rank then loop through first gr-1 return int
