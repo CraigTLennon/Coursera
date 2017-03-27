@@ -41,7 +41,8 @@ public class FindHighTemp {
 				double largeTemp=Double.parseDouble(largest.get("TemperatureF"));
 				if(temp>largeTemp){
 					largest=current;
-				}
+				}//above can be refactored by making a method for comparing 
+				//two records.
 		}}	return largest;
 	}
 	
