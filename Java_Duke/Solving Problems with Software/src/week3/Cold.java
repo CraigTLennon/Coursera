@@ -96,9 +96,69 @@ public class Cold {
 		System.out.println(par.second());
 	}
 	
+	public Double avgTemp(CSVParser parse){
+		Double total=0.0;
+		Double count =0.0;
+		Double naV=-9999.0;
+		Double temp =naV;
+		for(CSVRecord rec : parse){
+			temp=Double.parseDouble(rec.get("TemperatureF"));
+			if(temp!=naV){
+			count=count+1.0;
+			total=total+temp;
+			}
+		}
+		return total/count;
+	}
+	public void testavgTemp(){
+		DirectoryResource D = new DirectoryResource();
+		
+		for(File fl : D.selectedFiles()){
+			FileResource fr = new FileResource(fl);
+			Double avg = avgTemp(fr.getCSVParser());
+			System.out.println("Average temperature in file is "+avg);
+		}	
+	}
+	
+		
+	public Double avgWithHighHumid(CSVParser parse, int value){
+		Double total=0.0;
+		Double count =0.0;
+		Double naV=-9999.0;
+		Double temp =naV;
+		Boolean highEnough=false;
+		Double floor =(double) value;
+		String humid="";
+		
+		for(CSVRecord rec : parse){
+			temp=Double.parseDouble(rec.get("TemperatureF"));
+			humid=rec.get("Humidity");
+			if(temp!=naV && humid !="N/A" && Double.parseDouble(humid)>=floor){
+			count=count+1.0;
+			total=total+temp;
+			highEnough=true;
+			}
+		}
+		if(highEnough){	return total/count;}
+		else{
+			System.out.println("No temperatures with that humidity");
+			return 0.0; //Really this should be an exception or something
+		}
+	}
+	
+	public void testHighHumid(){
+		DirectoryResource D = new DirectoryResource();
+		for(File fl : D.selectedFiles()){
+			FileResource fr = new FileResource(fl);
+			Double avg = avgWithHighHumid(fr.getCSVParser(),80);
+			System.out.println("Average temperature in file is "+avg);
+		}	
+	}	
 	public void test(){
 		//coldFile();
-		lowHFile();
+		//lowHFile();
+		//testavgTemp();
+		testHighHumid();
 	}
 
 }
