@@ -12,26 +12,57 @@ public class GlabLibMap {
 	public static void main(String[] args) {
 		GlabLibMap G=new GlabLibMap();
 		G.makeStory();
-
+		System.out.println("\n"+G.totalWordsInMap()+" total words in all lists");
+		System.out.println(""+G.totalWordsConsidered()+" total words considered in GaldLib");
+		
 	}
 
 	private HashMap<String, ArrayList<String>> myMap;
 	private Random myRandom;
 	private String dataSourceURL="";
 	private String dataSourceDirectory="C:/Users/cLennon/Documents/GitHub/Coursera/Java_Duke/Structured Data/src/data/GladLibData/data";
-	
+	private ArrayList<String> used;
 	
 	public GlabLibMap(){
 		myMap=new HashMap<String, ArrayList<String>>();
 		myRandom = new Random();
 		initializeFromSource(dataSourceDirectory);
+		used = new ArrayList<String>();
 	}
+	
+	public int totalWordsInMap(){
+		int total =0;
+		for(String subject : myMap.keySet()){
+			 	total+= myMap.get(subject).size();
+		}
+		return total;
+	}
+	public int totalWordsConsidered(){
+		int total =0;
+		for(String subject : used){
+			
+			if(subject.equals("number")){
+				
+				total+=50;
+			}else{
+				
+				total+= myMap.get(subject).size();
+			}
+			 	
+		}
+		return total;
+	}
+	
 	
 	private String processWord(String w){
 		int first =w.indexOf("<");
 		int last =w.indexOf(">",first);
 		if(first==-1 ||last==-1){
 			return w;
+		}
+		String subject =w.substring(first+1, last);
+		if(!used.contains(subject)){
+			used.add(subject);
 		}
 		String prefix = w.substring(0,first);
 		String suffix = w.substring(last+1);
@@ -44,6 +75,7 @@ public class GlabLibMap {
 		printOut(story, 60);
 	}
 	private String fromTemplate(String source){
+		used.clear();
 		String story = "";
 		if (source.startsWith("http")) {
 			URLResource resource = new URLResource(source);
