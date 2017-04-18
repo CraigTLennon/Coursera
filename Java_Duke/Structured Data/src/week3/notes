@@ -10,3 +10,5 @@ java has ip class, but can use string for logs
 Date can be date class
 String fro request
 int for status and number of bytes
+Checking for equality
+== checks for exactly the same object, while .equals checks for same value.  If you do not write an equals method, == is the default

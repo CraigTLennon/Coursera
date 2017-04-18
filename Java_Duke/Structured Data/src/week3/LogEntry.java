@@ -21,14 +21,16 @@ public class LogEntry {
 		this.bytesReturned = bytesReturned;
 	}
 
-	
 	private String ipAddress;
 	private Date accessTime;
 	private String request;
 	private int statusCode;
 	private int bytesReturned;
 	
-	public String 
+	public String toString(){
+		return ipAddress+" "+accessTime+" "+request
+				+ " "+statusCode+" "+bytesReturned;
+	}
 	
 	public String getIpAddress() {
 		return ipAddress;
