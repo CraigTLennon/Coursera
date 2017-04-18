@@ -1,0 +1,12 @@
+notes on web logs
+110.76.104.12 web address first
+- - indicates missing information (computer name and user name but unreliable)
+date and time request was made
+the request 
+status (200 is success)
+# bytes the server replied with
+
+java has ip class, but can use string for logs
+Date can be date class
+String fro request
+int for status and number of bytes
