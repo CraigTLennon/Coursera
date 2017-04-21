@@ -2,8 +2,8 @@ package week1;
 
 public class OOCaesar {
 
-	private String alphabet;
-	private String shiftedAlphabet;
+	protected String alphabet;
+	protected String shiftedAlphabet;
 	
 	public OOCaesar(int key){
 	alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -13,7 +13,8 @@ public class OOCaesar {
 	public String encrypt(String input){
 		StringBuilder sb = new StringBuilder(input);
 		for(int i=0;i<sb.length();i++){
-			char c = sb.charAt(i);
+			Character c = sb.charAt(i);
+			c=Character.toUpperCase(c);
 			int ind=alphabet.indexOf(c);
 			if(ind!=-1){
 			sb.setCharAt(i, shiftedAlphabet.charAt(ind));}
@@ -24,7 +25,8 @@ public class OOCaesar {
 	public String decrypt(String input){
 	StringBuilder sb = new StringBuilder(input);
 	for(int i=0;i<sb.length();i++){
-		char c = sb.charAt(i);
+		Character c = sb.charAt(i);
+		c=Character.toUpperCase(c);
 		int ind=shiftedAlphabet.indexOf(c);
 		if(ind!=-1){
 		sb.setCharAt(i, alphabet.charAt(ind));}
