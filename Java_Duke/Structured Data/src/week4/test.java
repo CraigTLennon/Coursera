@@ -47,7 +47,7 @@ public class test {
 	//	int[] k={0,0};
 	//	String decrypt=C.decrypt(msg, k);
 	//	System.out.println(decrypt);
-		C.breakVigenere(fi,di,"e");
+		C.breakVigenere();
 		
 	}
 	

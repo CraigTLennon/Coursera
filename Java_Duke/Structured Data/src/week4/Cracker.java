@@ -1,8 +1,11 @@
 package week4;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
+import edu.duke.DirectoryResource;
 import edu.duke.FileResource;
 
 public class Cracker {
@@ -101,6 +104,24 @@ public class Cracker {
 		return decrypt[maxInd];
 	}
 	
+	public String breakForAllLanguages(String encrypted, ArrayList<HashSet<String>> allDicts){
+		HashMap<String,Integer> decryptCount = new HashMap<String,Integer>();
+		for(HashSet<String> dict : allDicts){
+			String mostCommon= mostCommonLetter(dict);
+			String decrypted = breakForLanguage(encrypted, dict, mostCommon);
+			int count = countWords(decrypted, dict); 
+			decryptCount.put(decrypted, count);
+		}
+		int maxCount=0;
+		String maxDec="";
+		for(String dec : decryptCount.keySet()){
+			if(decryptCount.get(dec)>maxCount ){
+				maxCount=decryptCount.get(dec);
+				maxDec=dec;
+			}
+		}
+		return maxDec;
+	 }
 	
 	public int countWords(String message, HashSet<String> dictionary){
 		String[] words=message.split("\\W+");
@@ -113,18 +134,74 @@ public class Cracker {
 	//	System.out.println(count);
 		return count;
 	}
-		
+	
+	public String mostCommonLetter(HashSet<String> dictionary){
+		HashMap<Character,Integer> letters = new HashMap<Character,Integer>();
+		for(String word : dictionary){
+			for(int k=0;k<word.length();k++){
+				Character c = word.charAt(k);
+				if(letters.containsKey(c)){
+					letters.put(c, letters.get(c)+1);
+				}else{
+					letters.put(c, 1);
+				}
+			}}
+		Character maxLetter = 'z';  //clearly wrong for debugging
+		int maxValue=0;
+		for(Character c : letters.keySet()){
+			if(letters.get(c)>maxValue){
+				maxValue=letters.get(c);
+				maxLetter = c;
+			}
+		}
+		System.out.println("most common letter is "+ maxLetter);
+		return Character.toString(maxLetter);
+	}
+	
+	
+	
 	public void breakVigenere(){
-		String mostCommon ="e";
+		ArrayList<HashSet<String>> allDicts=new ArrayList<HashSet<String>>();
+		DirectoryResource dir=new DirectoryResource();
 		FileResource frMsg = new FileResource();
-		FileResource frDict = new FileResource();
+		String message =frMsg.asString();
+		for(File dict : dir.selectedFiles()){
+			FileResource frDict = new FileResource(dict);
+			HashSet<String> Dict=readDictionary(frDict);
+			allDicts.add(Dict);
+			}
+		String decrypt = breakForAllLanguages(message,allDicts);
+		
+				System.out.print(decrypt);
+	}
+	public void breakVigenere(String mName,String dName){
+		FileResource frMsg = new FileResource(mName);
+		FileResource frDict = new FileResource(dName);
 		String message =frMsg.asString();
 		HashSet<String> Dict=readDictionary(frDict);
+		String mostCommon=mostCommonLetter(Dict);
 		String decrypt=breakForLanguage(message,Dict,mostCommon);
 		System.out.print(decrypt);
 	}
-	
 
+	
+	
+	public void breakVigenere(String mName){
+		ArrayList<HashSet<String>> allDicts=new ArrayList<HashSet<String>>();
+		DirectoryResource dir=new DirectoryResource();
+		FileResource frMsg = new FileResource(mName);
+		String message =frMsg.asString();
+		for(File dict : dir.selectedFiles()){
+			FileResource frDict = new FileResource(dict);
+			HashSet<String> Dict=readDictionary(frDict);
+			allDicts.add(Dict);
+			}
+		String decrypt = breakForAllLanguages(message,allDicts);
+		
+				System.out.print(decrypt);
+	}
+	
+	
 	public void breakVigenere(String mName,String dName,String mostCommon){
 		FileResource frMsg = new FileResource(mName);
 		FileResource frDict = new FileResource(dName);
