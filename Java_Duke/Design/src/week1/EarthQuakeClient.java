@@ -61,12 +61,35 @@ public class EarthQuakeClient {
 
     public ArrayList<QuakeEntry> filterByPhrase(ArrayList<QuakeEntry> quakes, String where, String phrase){
     	ArrayList<QuakeEntry> phraseList = new ArrayList<QuakeEntry>();
-    	
-    	//if(where.equals("start") && quake.in)
-    	
+    	int strLength=phrase.length();
+    	for(QuakeEntry quake : quakes){
+    		int fromEnd=quake.getInfo().length()-strLength;
+    		if(where.equals("start") && quake.getInfo().indexOf(phrase)==0){
+    			phraseList.add(quake);
+    		}else if(where.equals("end") && quake.getInfo().lastIndexOf(phrase)==fromEnd){
+    			phraseList.add(quake);
+    		}else if(where.equals("any") && quake.getInfo().indexOf(phrase)>-1){
+    			phraseList.add(quake);
+    		}
+    	} 	
     	return phraseList;
-    	
     }
+    
+    public void quakesByPhrase(){
+	    EarthQuakeParser parser = new EarthQuakeParser();
+        //String source = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
+        String source = "data/nov20quakedata.atom";
+        ArrayList<QuakeEntry> list = parser.read(source);
+        System.out.println("read data for " + list.size() + " quakes");
+        //String phrase ="California";
+        //String phrase ="Can";
+        String phrase ="Explosion";
+        ArrayList<QuakeEntry> listPhrase = filterByPhrase(list, "start",phrase);
+        for (QuakeEntry qe : listPhrase) {
+           System.out.println(qe); 
+        }
+        System.out.println("number of quakes with titles including "+ phrase+" is "+listPhrase.size());
+	}
     
 	public void bigQuakes() {
 	    EarthQuakeParser parser = new EarthQuakeParser();

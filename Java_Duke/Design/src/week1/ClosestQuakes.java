@@ -8,6 +8,8 @@ public class ClosestQuakes {
 		ArrayList<QuakeEntry> ret = new ArrayList<QuakeEntry>();
 		int minIndex=0;
 		ArrayList<QuakeEntry> quakeCopy = new ArrayList<QuakeEntry>(quakes);
+		int num = numQuakes;
+		if(quakes.size()<num){num=quakes.size();}
 	for(int j=0;j<numQuakes;j++){
 		for(int k=1; k<quakeCopy.size();k++){
 			QuakeEntry quake = quakeCopy.get(k);

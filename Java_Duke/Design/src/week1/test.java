@@ -14,10 +14,13 @@ public class test {
 		EarthQuakeClient E = new EarthQuakeClient();
 		//E.createCSV();
 		//E.bigQuakes();
-		E.closeToMe();
-		ClosestQuakes C = new ClosestQuakes();
-		E.quakesOfDepth();
+//		E.closeToMe();
+//		ClosestQuakes C = new ClosestQuakes();
+	//	E.quakesOfDepth();
 		//C.findClosestQuakes();
+		E.quakesByPhrase();
+		LargestQuakes L = new LargestQuakes();
+		L.findLargestQuakes();
 	}
 
 }
