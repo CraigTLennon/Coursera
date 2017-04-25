@@ -42,12 +42,22 @@ public class QuakeEntry implements Comparable<QuakeEntry>{
 		return depth;
 	}
 
+	public int compareDepth(QuakeEntry quake){
+		double diffDepth=depth-quake.getDepth();
+		//-400--100<0, -2000 - - 10000>0 so positive if the other quake is deeper.  Since we want deeper earlier in the sort order we use this version as out basis.
+		if(diffDepth>0) return 1;
+		else if(diffDepth<0) return -1;
+		else return 0;
+	}
 	@Override
-	public int compareTo(QuakeEntry quake) {
+	public int compareTo(QuakeEntry quake) {  // This method is about asking a quake to compare itself to another quake.  By contrast, the comparator compares two objects of the same class
+		//based on its own criteria.  You can create multiple for different criteria.
 		double diffMag = magnitude - quake.getMagnitude();
 		if (diffMag < 0) return -1;
-		if (diffMag > 0) return 1;
-		return 0;
+		else if (diffMag > 0) return 1;
+		else{ compareDepth(quake);
+		}
+		return 0; //not used
 		//return Double.compare(magnitude,quake.getMagnitude());
 		
 	}
