@@ -66,6 +66,7 @@ public class MarkovWordGram implements IMarkovModel {
 	}
 		
 	public int indexOf(String[] words,WordGram target, int start){
+		if(start>=words.length-target.length()+1) throw new IndexOutOfBoundsException("bad start position "+ start);
 		for(int i = start;i<words.length-target.length()+1;i++){
 			StringBuilder text = new StringBuilder();
 			for(int j=i;j<i+target.length();j++){
