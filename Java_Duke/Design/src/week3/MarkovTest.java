@@ -15,17 +15,19 @@ public class MarkovTest {
 	
 	public void markovWordTest(){
 		String fname="C:/Users/cLennon/Documents/GitHub/Coursera/Java_Duke/Design/src/week3/data/alice.txt";
-		MarkovWordOne M = new MarkovWordOne();
+//		MarkovWordOne M = new MarkovWordOne();
+		MarkovWordTwo M = new MarkovWordTwo();
 		FileResource fl = new FileResource(fname);
 		String oneLine=fl.asString().replace('\n', ' ');
-		M.setRandom(2);
+		M.setRandom(3);
 		String text=runModel(M,oneLine,100);
 		System.out.println(text);
 	}
 	
 	public String runModel(IMarkovModel M,String s, int numChar){
 		M.setTraining(s);
-		String randomText=M.getRandomText(1000);
+		String randomText=M.getRandomText(numChar);
+//		System.out.println(randomText);
 		return randomText;
 	}
 	
