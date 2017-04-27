@@ -65,7 +65,7 @@ public class WordGramTester {
 
 	public void testGetFollows(){
 		String stringText="the start is at the start";
-		String [] text=new String[] {"the","start","is","at","the","start"};
+//		String [] text=new String[] {"the","start","is","at","the","start"};
 		WordGram wg=new WordGram(new String[] {"the","start"},0,2);
 		MarkovWordGram M = new  MarkovWordGram(2);
 		M.setTraining(stringText);
