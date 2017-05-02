@@ -1,4 +1,4 @@
-package week4;
+package week5;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,6 @@ import de.fhpotsdam.unfolding.marker.AbstractShapeMarker;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MultiMarker;
 import de.fhpotsdam.unfolding.providers.AbstractMapProvider;
-import de.fhpotsdam.unfolding.providers.Google;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
@@ -61,6 +60,8 @@ public class EarthquakeCityMap extends PApplet {
 
 	// A List of country markers
 	private List<Marker> countryMarkers;
+	private CommonMarker lastSelected;
+	private CommonMarker lastClicked;
 	
 	public void setup() {		
 		// (1) Initializing canvas and map tiles
@@ -133,7 +134,6 @@ public class EarthquakeCityMap extends PApplet {
 	}
 	
 	// helper method to draw key in GUI
-	// TODO: Update this method as appropriate
 	private void addKey() {	
 		// Remember you can use Processing's graphics methods here
 		fill(255, 250, 240);
@@ -185,8 +185,78 @@ public class EarthquakeCityMap extends PApplet {
 		
 	}
 
+	@Override
+	public void mouseMoved(){
+		this.unhideMarkers();
+		if(lastSelected !=null){
+			lastSelected.setSelected(false);
+			lastSelected =null;
+		}
+		selectMarkerIfHover(quakeMarkers);
+		selectMarkerIfHover(cityMarkers);
+	}
+	
+	private void selectMarkerIfHover(List<Marker> markers){
+		for(Marker m : markers){
+			if(m.isInside(map, mouseX, mouseY)&&lastSelected==null){
+				m.setSelected(true);
+				if( m instanceof CommonMarker)lastSelected=(CommonMarker) m;				
+				lastSelected.setSelected(true);
+//				if(m instanceof CommonMarker) System.out.println(((CommonMarker) m).getProperty("name").toString());
+				 
+			}
+
+		}
+	}
+	
+	@Override 
+	public void mouseClicked(){
+//		this.unhideMarkers();
+		for(Marker c : cityMarkers){
+			if(c.isInside(map, mouseX, mouseY)){
+				c.setHidden(false);
+			
+//				if(c instanceof CommonMarker) System.out.println(((CommonMarker) c).getProperty("name").toString());
+				for(Marker q : quakeMarkers){
+					if( q instanceof EarthquakeMarker){
+						EarthquakeMarker quake = (EarthquakeMarker) q;
+						double distance = q.getDistanceTo(c.getLocation());
+						double threat =quake.threatCircle();
+						if(distance>threat){q.setHidden(true);}else{q.setHidden(true); }
+					}		
+				}
+				 
+			}else{c.setHidden(true);
+			//if(c instanceof CommonMarker) System.out.println(((CommonMarker) c).getProperty("name").toString());
+			}
+		}
+		
+		for(Marker q : quakeMarkers){
+			if(q.isInside(map, mouseX, mouseY)){
+				q.setHidden(false);
+//				if(q instanceof CommonMarker){ System.out.println(((CommonMarker) q).getProperties().keySet().toString());}
+				for(Marker c : cityMarkers){
+					if( q instanceof EarthquakeMarker){
+						EarthquakeMarker quake = (EarthquakeMarker) q;
+						double distance = q.getDistanceTo(c.getLocation());
+						double threat =quake.threatCircle();
+						if(distance>threat){q.setHidden(true);}else{q.setHidden(true);}
+					}		
+				}
+			}else{q.setHidden(true);}}
+		}
 	
 	
+	
+	private void unhideMarkers() {
+		for(Marker marker : quakeMarkers) {
+			marker.setHidden(false);
+		}
+			
+		for(Marker marker : cityMarkers) {
+			marker.setHidden(false);
+		}
+	}
 	// Checks whether this quake occurred on land.  If it did, it sets the 
 	// "country" property of its PointFeature to the country where it occurred
 	// and returns true.  Notice that the helper method isInCountry will

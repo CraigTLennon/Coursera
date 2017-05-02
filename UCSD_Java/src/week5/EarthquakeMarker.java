@@ -1,4 +1,4 @@
-package week4;
+package week5;
 
 import de.fhpotsdam.unfolding.data.PointFeature;
 import de.fhpotsdam.unfolding.marker.SimplePointMarker;
@@ -10,12 +10,13 @@ import processing.core.PGraphics;
  * @author Your name here
  *
  */
-public abstract class EarthquakeMarker extends SimplePointMarker
+public abstract class EarthquakeMarker extends CommonMarker
 {
 	
 	// Did the earthquake occur on land?  This will be set by the subclasses.
 	protected boolean isOnLand;
-
+	protected float radius;
+	protected static final float kmPerMile = 1.6f;
 	// SimplePointMarker has a field "radius" which is inherited
 	// by Earthquake marker:
 	// protected float radius;
@@ -36,11 +37,7 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	/** Greater than or equal to this threshold is a deep depth */
 	public static final float THRESHOLD_DEEP = 300;
 
-//	private  color red=pg.color(255,0,0);
-//	private  color blue=color(0,0,255);
-//	private  color yellow=color(255,255,0);
 
-	
 	// abstract method implemented in derived classes
 	public abstract void drawEarthquake(PGraphics pg, float x, float y);
 		
@@ -59,32 +56,30 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 //		System.out.println(feature.getProperty("age").toString());
 	}
 	
+	public double threatCircle() {	
+		double miles = 20.0f * Math.pow(1.8, 2*getMagnitude()-5);
+		double km = (miles * kmPerMile);
+		return km;
+	}
+	
+	public void drawThreatCircle(PGraphics pg, float x, float y){
+		pg.noFill();
+		float  d=(float) threatCircle();
+		pg.ellipse(x, y, d, d);
+	}
 
 	// calls abstract method drawEarthquake and then checks age and draws X if needed
-	public void draw(PGraphics pg, float x, float y) {
-		// save previous styling
-		pg.pushStyle();
-			
-		// determine color of marker from depth
-		colorDetermine(pg);
-
-		// call abstract method implemented in child class to draw marker shape
-		drawEarthquake(pg, x, y);
-
+ public void drawX(PGraphics pg, float x, float y){
 		if(this.getProperty("age").toString().equals("Past Day") ||this.getProperty("age").toString().equals("Past Hour") ){
 			pg.line(x-radius, y-radius, x+radius, y+radius);
-			pg.line(x+radius, y-radius, x-radius, y+radius);
-		}
-		// reset to previous styling
-		pg.popStyle();
-		
-	}
+			pg.line(x+radius, y-radius, x-radius, y+radius);}
+ }
 	
 	// determine color of marker from depth
 	// We suggest: Deep = red, intermediate = blue, shallow = yellow
 	// But this is up to you, of course.
 	// You might find the getters below helpful.
-	private void colorDetermine(PGraphics pg) {
+	protected void colorDetermine(PGraphics pg) {
 		
 		float depth=this.getDepth();
 //		System.out.println("Depth "+depth);

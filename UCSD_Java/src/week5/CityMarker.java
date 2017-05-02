@@ -1,4 +1,4 @@
-package week4;
+package week5;
 
 import de.fhpotsdam.unfolding.data.Feature;
 import de.fhpotsdam.unfolding.data.PointFeature;
@@ -12,7 +12,7 @@ import processing.core.PGraphics;
  * @author Your name here
  *
  */
-public class CityMarker extends SimplePointMarker {
+public class CityMarker extends CommonMarker {
 	
 	// The size of the triangle marker
 	// It's a good idea to use this variable in your draw method
@@ -27,7 +27,24 @@ public class CityMarker extends SimplePointMarker {
 		super(((PointFeature)city).getLocation(), city.getProperties());
 	}
 	
+	//should just be draw
+	public  void drawMarker(PGraphics pg, float x, float y){
+		pg.pushStyle();
+		pg.fill(255,0,255);
+		pg.triangle(x,y+5,x+5,y-5,x-5,y-5);
+		
+		// Restore previous drawing style
+		pg.popStyle();
+	}
+	//shows text:  box with city name, country and population
 	
+	
+	
+	public void showTitle(PGraphics pg, float x, float y)
+	{
+		
+		pg.text(this.getCity()+", "+this.getCountry()+", "+this.getPopulation(), x, y);
+	}
 	// HINT: pg is the graphics object on which you call the graphics
 	// methods.  e.g. pg.fill(255, 0, 0) will set the color to red
 	// x and y are the center of the object to draw. 
@@ -38,15 +55,7 @@ public class CityMarker extends SimplePointMarker {
 	/**
 	 * Implementation of method to draw marker on the map.
 	 */
-	public void draw(PGraphics pg, float x, float y) {
-		// Save previous drawing style
-		pg.pushStyle();
-		pg.fill(255,0,255);
-		pg.triangle(x,y+5,x+5,y-5,x-5,y-5);
-		
-		// Restore previous drawing style
-		pg.popStyle();
-	}
+ 
 	
 	/* Local getters for some city properties.  You might not need these 
 	 * in module 4. 	 */
