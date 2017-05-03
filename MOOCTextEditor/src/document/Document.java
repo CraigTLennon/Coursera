@@ -62,12 +62,22 @@ public abstract class Document {
 	 *       is not considered a syllable unless the word has no other syllables. 
 	 *       You should consider y a vowel.
 	 */
+	
 	protected int countSyllables(String word)
 	{
-		// TODO: Implement this method so that you can call it from the 
-	    // getNumSyllables method in BasicDocument (module 2) and 
-	    // EfficientDocument (module 3).
-	    return 0;
+		int count=0;
+		boolean flag= false;
+		String vowels="aeiouy";
+		word=word.toLowerCase();
+		for(int l=0;l<word.length();l++){			
+			char letter = word.charAt(l);
+			if(letter=='e'&& l==word.length()-1)return Math.max(count, 1);
+			if(vowels.indexOf(letter)>-1 && !flag){
+				flag=true;
+				count+=1;
+			}else if(vowels.indexOf(letter)==-1 && flag) flag=false;
+		}
+		return count;
 	}
 	
 	/** A method for testing
@@ -130,9 +140,10 @@ public abstract class Document {
 	/** return the Flesch readability score of this document */
 	public double getFleschScore()
 	{
-	    // TODO: You will play with this method in week 1, and 
-		// then implement it in week 2
-	    return 0.0;
+	    double flesch=206.835-1.015*(((double)getNumWords())/((double)getNumSentences())) -84.6*(((double)getNumSyllables())/((double)getNumWords()));
+	    System.out.println((double)getNumWords()+" words "+(double)getNumSyllables() +" Syll "+(double)getNumSentences() + " sent" ); 
+	    
+	    return flesch;
 	}
 	
 	

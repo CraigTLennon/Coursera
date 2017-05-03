@@ -34,9 +34,10 @@ public class BasicDocument extends Document
 	@Override
 	public int getNumWords()
 	{
-		//TODO: Implement this method in week 2 according to the comments above.  
-		// See the Module 2 support videos if you need help.
-	    return 0;
+		if(this.getText().isEmpty())return 0;
+		String[] temp=getWords();
+	    return temp.length;
+
 	}
 	
 	/**
@@ -54,9 +55,28 @@ public class BasicDocument extends Document
 	@Override
 	public int getNumSentences()
 	{
-	    //TODO: Implement this method.  See the Module 2 support videos 
-        // if you need help.
-        return 0;
+			if(this.getText().isEmpty())return 0;
+			String regx="\\s*[\\.!?]+\\s*";
+			String text=getText();
+			String[] temp=  text.split(regx);
+//			System.out.println("words are:" );
+//			for(String t : temp)System.out.println(t);
+//			System.out.println("sentence "+text+ " has "+temp.length+ " words." );
+		    return temp.length;
+	}
+	
+	public String[] getWords(){
+		
+		String regx="([^a-zA-Z])+";
+		String text=getText();
+		String[] temp=  text.split(regx);
+//		System.out.println();
+//		System.out.println("Start get num sent");
+//		System.out.println(text+ "  broken into "+temp.length+" sentences.");
+//		for(String t : temp){System.out.println(t);}
+//		System.out.println("End get num sent");
+	    return temp;
+		
 	}
 	
 	/**
@@ -73,15 +93,23 @@ public class BasicDocument extends Document
 	 * 
 	 * @return The number of syllables in the document.
 	 */
+
+	
 	@Override
 	public int getNumSyllables()
 	{
+		if(this.getText().isEmpty())return 0;
+		String[] words=getWords();
+		int count=0;
+		for(String word:words){
+			count+=countSyllables(word);
+		}
 	    //TODO: Implement this method in week 2.  See the Module 2 support videos 
         // if you need help.  And note that there is no need to use a regular
 		// expression for the syllable counting.  We recommend you implement 
 		// the helper function countSyllables in Document.java using a loop, 
 		// and then call it here on each word.
-        return 0;
+        return count;
 	}
 	
 	
@@ -95,6 +123,7 @@ public class BasicDocument extends Document
 		 * in the string, respectively.  You can use these examples to help clarify 
 		 * your understanding of how to count syllables, words, and sentences.
 		 */
+//		testCase(new BasicDocument("for ????  this...  "),1,1,1);
 		testCase(new BasicDocument("This is a test.  How many???  "
 		        + "Senteeeeeeeeeences are here... there should be 5!  Right?"),
 				16, 13, 5);
