@@ -33,32 +33,30 @@ public class DocumentBenchmarking {
 		// THe number of characters to start with. 
 		// You can play around with this.
 		int start = 50000;
-		
-		// TODO: Fill in the rest of this method so that it runs two loops
-		// and prints out timing results as described in the assignment 
-		// instructions and following the pseudocode below.
+		///Could do it n times if I wanted to and average over them.
+		System.out.println("NumChar"+" "+"Basic"+"  "+"Effic");
 		for (int numToCheck = start; numToCheck < numSteps*increment + start; 
 				numToCheck += increment)
 		{
+			
+			System.out.print(numToCheck+"\t");
+			String nextText=getStringFromFile(textfile, numToCheck);
 			// numToCheck holds the number of characters that you should read from the 
 			// file to create both a BasicDocument and an EfficientDocument.  
+			long startTime = System.nanoTime();
+			BasicDocument basic=new BasicDocument(nextText);
+			basic.getFleschScore();
+			long stopTime = System.nanoTime();
+			double time = ((double) (stopTime-startTime))/1000000.0;
+			System.out.print(time+"\t");
 			
-			/* Each time through this loop you should:
-			 * 1. Print out numToCheck followed by a tab (\t) (NOT a newline)
-			 * 2. Read numToCheck characters from the file into a String
-			 *     Hint: use the helper method below.
-			 * 3. Time a loop that runs trials times (trials is the variable above) that:
-			 *     a. Creates a BasicDocument 
-			 *     b. Calls fleshScore on this document
-			 * 4. Print out the time it took to complete the loop in step 3 
-			 *      (on the same line as the first print statement) followed by a tab (\t)
-			 * 5. Time a loop that runs trials times (trials is the variable above) that:
-			 *     a. Creates an EfficientDocument 
-			 *     b. Calls fleshScore on this document
-			 * 6. Print out the time it took to complete the loop in step 5 
-			 *      (on the same line as the first print statement) followed by a newline (\n) 
-			 */  
-			 
+			long startTime2 = System.nanoTime();
+			EfficientDocument effic=new EfficientDocument(nextText);
+			basic.getFleschScore();
+			long stopTime2 = System.nanoTime();
+			double time2 = ((double) (stopTime2-startTime2))/1000000.0;
+			System.out.println(time2 );
+
 		}
 	
 	}

@@ -141,7 +141,7 @@ public abstract class Document {
 	public double getFleschScore()
 	{
 	    double flesch=206.835-1.015*(((double)getNumWords())/((double)getNumSentences())) -84.6*(((double)getNumSyllables())/((double)getNumWords()));
-	    System.out.println((double)getNumWords()+" words "+(double)getNumSyllables() +" Syll "+(double)getNumSentences() + " sent" ); 
+//	    System.out.println((double)getNumWords()+" words "+(double)getNumSyllables() +" Syll "+(double)getNumSentences() + " sent" ); 
 	    
 	    return flesch;
 	}
