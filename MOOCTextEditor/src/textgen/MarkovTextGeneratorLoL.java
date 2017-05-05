@@ -2,8 +2,9 @@ package textgen;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Random;
+
+import document.BasicDocument;
 
 /** 
  * An implementation of the MTG interface that uses a list of lists.
@@ -32,7 +33,24 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	@Override
 	public void train(String sourceText)
 	{
-		// TODO: Implement this method
+		sourceText=sourceText.toLowerCase();
+		if(sourceText.length()==0) throw new NullPointerException("Text cannot be empty");
+		BasicDocument text=new BasicDocument(sourceText);
+		String[] words=text.getWords();
+//		System.out.println(words.length+" is the number of words");
+		if(words.length==0) throw new NullPointerException("Text must contain words");
+		starter=words[0];
+		for(int i=0;i<words.length-1;i++){
+			int index = getIndex(words[i]);
+//			System.out.println(words[i]+" is at index "+index+" and the next word is "+ words[i+1]);
+			if(index>-1){
+				wordList.get(index).addNextWord(words[i+1]);
+			}else{
+				ListNode newWord = new  ListNode(words[i]);
+				newWord.addNextWord(words[i+1]);
+				wordList.add(newWord);
+			}
+		}
 	}
 	
 	/** 
@@ -40,8 +58,32 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	 */
 	@Override
 	public String generateText(int numWords) {
-	    // TODO: Implement this method
-		return null;
+//		System.out.println("starter "+starter);
+		int ind=getIndex(starter);
+//		System.out.println("ind starter "+ind);
+	    ListNode prevWord=wordList.get(ind);
+	    StringBuilder sb= new StringBuilder(prevWord.getWord());
+	    sb.append(prevWord.getWord());
+		for(int i=0;i<numWords;i++){
+	    	String nextWord=prevWord.getRandomNextWord(rnGenerator);
+	    	sb.append(" "+nextWord);
+	    	System.out.println(nextWord);
+	    	int index=getIndex(nextWord);
+	    	if(index==-1) index=rnGenerator.nextInt(wordList.size());
+	    		prevWord=wordList.get(index);
+				}
+		return sb.toString();
+	}
+	
+	private int getIndex(String word){
+		
+		if(word==null) throw new NullPointerException("Word cannot be null");
+		if(wordList.size()==0) return -1;
+		for(int index=0;index<wordList.size();index++){
+			String nextWord=wordList.get(index).getWord();
+			if(word.equals(nextWord)) return index;
+		}
+		return -1;
 	}
 	
 	
@@ -61,10 +103,12 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	@Override
 	public void retrain(String sourceText)
 	{
-		// TODO: Implement this method.
+		wordList = new LinkedList<ListNode>();
+		starter = "";
+		this.train(sourceText);
+		
 	}
 	
-	// TODO: Add any private helper methods you need here.
 	
 	
 	/**
@@ -105,7 +149,7 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 				"I don't know why you say goodbye, I say hello, hello, hello, "+
 				"I don't know why you say goodbye, I say hello, hello, hello, "+
 				"I don't know why you say goodbye, I say hello, hello, hello,";
-		System.out.println(textString2);
+//		System.out.println(textString2);
 		gen.retrain(textString2);
 		System.out.println(gen);
 		System.out.println(gen.generateText(20));
@@ -115,7 +159,7 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 
 /** Links a word to the next words in the list 
  * You should use this class in your implementation. */
-class ListNode
+class ListNode 
 {
     // The word that is linking to the next words
 	private String word;
@@ -128,6 +172,18 @@ class ListNode
 		this.word = word;
 		nextWords = new LinkedList<String>();
 	}
+	public boolean equals(ListNode other){
+		return other.getWord().equals(this.word);
+	}
+	
+	public boolean equals(String other){
+		return other.equals(this.word);
+	}
+	
+	public int hashCode(){
+		return this.word.hashCode();
+	}
+		
 	
 	public String getWord()
 	{
@@ -141,10 +197,9 @@ class ListNode
 	
 	public String getRandomNextWord(Random generator)
 	{
-		// TODO: Implement this method
-	    // The random number generator should be passed from 
-	    // the MarkovTextGeneratorLoL class
-	    return null;
+		if(nextWords.size()==0)return word;
+		int ind = generator.nextInt(nextWords.size());
+	    return nextWords.get(ind);
 	}
 
 	public String toString()

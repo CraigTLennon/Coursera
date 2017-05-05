@@ -3,9 +3,10 @@
  */
 package textgen;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +23,8 @@ public class MyLinkedListTester {
 	MyLinkedList<Integer> emptyList;
 	MyLinkedList<Integer> longerList;
 	MyLinkedList<Integer> list1;
-	
+	MyLinkedList<Double> doubleList;
+	MyLinkedList<String> addList;
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -42,7 +44,17 @@ public class MyLinkedListTester {
 		list1.add(65);
 		list1.add(21);
 		list1.add(42);
+		ArrayList<Double> temp= new ArrayList<Double>();
+		temp.add(1.0);temp.add(1.3);temp.add(2.0);temp.add(3.0);
+		doubleList = new MyLinkedList<Double>(temp);
+		addList = new MyLinkedList<String>();
+		addList.add("C");
+		addList.add("D");
+		addList.add("E");
+		addList.set(1,"F");
 		
+		addList.add("H");
+		addList.add(3,"G");
 	}
 
 	
@@ -65,6 +77,7 @@ public class MyLinkedListTester {
 		// test short list, first contents, then out of bounds
 		assertEquals("Check first", "A", shortList.get(0));
 		assertEquals("Check second", "B", shortList.get(1));
+		assertEquals("Check double",  1.0,  doubleList.get(0),.00001);
 		
 		try {
 			shortList.get(-1);
@@ -123,8 +136,8 @@ public class MyLinkedListTester {
 	@Test
 	public void testAddEnd()
 	{
-        // TODO: implement this test
-		
+		assertEquals("Remove: check element 0 is correct ", "C", addList.get(0));
+		assertEquals("Remove: check element 2 is correct ", "E", addList.get(2));
 	}
 
 	
@@ -132,7 +145,8 @@ public class MyLinkedListTester {
 	@Test
 	public void testSize()
 	{
-		// TODO: implement this test
+		 	assertEquals("emply list size 0 ", (int) 0, emptyList.size(),0.1);
+		 	assertEquals("addList size 5 ", (Integer) 5, addList.size(),.01);
 	}
 
 	
@@ -144,15 +158,15 @@ public class MyLinkedListTester {
 	@Test
 	public void testAddAtIndex()
 	{
-        // TODO: implement this test
 		
+		assertEquals("Remove: check element 1 is correct ", "G", addList.get(3));
 	}
 	
 	/** Test setting an element in the list */
 	@Test
 	public void testSet()
 	{
-	    // TODO: implement this test
+		assertEquals("Remove: check element 1 is correct ", "F", addList.get(1));
 	    
 	}
 	
