@@ -1,6 +1,7 @@
 package spelling;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     public AutoCompleteDictionaryTrie()
 	{
 		root = new TrieNode();
+		size=0;
 	}
 	
 	
@@ -39,8 +41,26 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public boolean addWord(String word)
 	{
-	    //TODO: Implement this method.
-	    return false;
+		word=word.toLowerCase();
+		if(isWord(word)) return false;
+	    //for each character, see if trieNode exists.  If not create.  When get to last letter change existing to is word or make new isword.
+		TrieNode current = root;
+		for(int charInd=0;charInd<word.length();charInd++){
+			char ch = word.charAt(charInd);
+			TrieNode chChild = current.getChild(ch);
+			if(chChild==null){
+				current =current.insert(ch);
+			}else{
+				current=chChild;
+			}
+		}
+		
+		current.setEndsWord(true);
+		
+		if(isWord(word)){size+=1;
+	    return true;}else{
+	    	System.out.println("error adding "+word);
+	    	return false;}
 	}
 	
 	/** 
@@ -49,8 +69,8 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public int size()
 	{
-	    //TODO: Implement this method
-	    return 0;
+	    
+	    return size;
 	}
 	
 	
@@ -59,8 +79,19 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	@Override
 	public boolean isWord(String s) 
 	{
-	    // TODO: Implement this method
-		return false;
+		String word=s.toLowerCase();
+		TrieNode current = root;
+		for(int charInd=0;charInd<word.length();charInd++){
+			char ch = word.charAt(charInd);
+			TrieNode chChild = current.getChild(ch);
+			if(chChild==null){
+				return false;
+			}else{
+				current=chChild;
+			}
+		}
+		
+		return current.endsWord();
 	}
 
 	/** 
@@ -86,24 +117,39 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
      */@Override
      public List<String> predictCompletions(String prefix, int numCompletions) 
      {
-    	 // TODO: Implement this method
-    	 // This method should implement the following algorithm:
-    	 // 1. Find the stem in the trie.  If the stem does not appear in the trie, return an
-    	 //    empty list
-    	 // 2. Once the stem is found, perform a breadth first search to generate completions
-    	 //    using the following algorithm:
-    	 //    Create a queue (LinkedList) and add the node that completes the stem to the back
-    	 //       of the list.
-    	 //    Create a list of completions to return (initially empty)
-    	 //    While the queue is not empty and you don't have enough completions:
-    	 //       remove the first Node from the queue
-    	 //       If it is a word, add it to the completions list
-    	 //       Add all of its child nodes to the back of the queue
-    	 // Return the list of completions
-    	 
-         return null;
+    	 LinkedList<String >result=new LinkedList<String>();
+    	 LinkedList<TrieNode> que =new LinkedList<TrieNode>();
+    	 TrieNode stem=findStem(prefix);
+    	 if(stem==null) return result;
+    	 que.add(stem);
+ 		while(!que.isEmpty() && result.size()<numCompletions){
+ 			TrieNode current = que.remove();
+ 				String currentString=current.getText();
+// 				System.out.println("current s is "+currentString);
+ 				if(isWord(currentString)) result.add(currentString);
+ 				Set<Character> childSet=current.getValidNextCharacters();
+ 				for(Character ch : childSet){
+ 					TrieNode nextNode= current.getChild(ch);
+ 					que.add(nextNode);
+ 				}	
+ 		}
+        return result;
      }
 
+     private TrieNode findStem(String prefix){
+    	 prefix=prefix.toLowerCase();
+    	 TrieNode current = root;
+    	 for(int charInd=0;charInd<prefix.length();charInd++){
+ 			char ch = prefix.charAt(charInd);
+ 			TrieNode chChild = current.getChild(ch);
+ 			if(chChild==null){
+ 				return null;
+ 			}else{
+ 				current=chChild;
+ 			}
+ 		}
+    	 return current;
+     }
  	// For debugging
  	public void printTree()
  	{
