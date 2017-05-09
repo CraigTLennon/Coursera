@@ -17,6 +17,14 @@ import java.util.List;
  */
 public class WPTree implements WordPath {
 
+	
+	 public static void main(String[] args) {
+		 WPTree W = new WPTree();
+		List<String> path= W.findPath("a", "yuppie");
+		for(String s:path){
+			System.out.println(s);
+		}
+	 }
 	// this is the root node of the WPTree
 	private WPTreeNode root;
 	// used to search for nearby Words
@@ -26,10 +34,10 @@ public class WPTree implements WordPath {
 	// You'll need to create your own NearbyWords object here.
 	public WPTree () {
 		this.root = null;
-		// TODO initialize a NearbyWords object
-		// Dictionary d = new DictionaryHashSet();
-		// DictionaryLoader.loadDictionary(d, "data/dict.txt");
-		// this.nw = new NearbyWords(d);
+		 Dictionary d = new DictionaryHashSet();
+		 DictionaryLoader.loadDictionary(d, "data/dict.txt");
+		 this.nw = new NearbyWords(d);
+		 
 	}
 	
 	//This constructor will be used by the grader code
@@ -41,7 +49,30 @@ public class WPTree implements WordPath {
 	// see method description in WordPath interface
 	public List<String> findPath(String word1, String word2) 
 	{
-	    // TODO: Implement this method.
+		WPTreeNode wordNode = new WPTreeNode(word1,root);
+		HashSet<String> visited = new HashSet<String>();
+		LinkedList<WPTreeNode> queue = new LinkedList<WPTreeNode>();
+		visited.add(word1);
+		queue.push(wordNode);
+		
+		
+		while(!visited.contains(word2)){
+			WPTreeNode parent=queue.removeFirst();
+			String parentWord=parent.getWord();
+			List<String> candidates=nw.distanceOne(parentWord, true);
+			for(String c : candidates){
+				if(!visited.contains(c)){
+					visited.add(c);
+					if(nw.isWord(c)){
+						WPTreeNode nextNode = new WPTreeNode(c,parent);
+						if(c.equals(word2)) return nextNode.buildPathToRoot();
+						parent.addChild(c);
+						queue.add(nextNode);
+					}	
+				}
+				}
+		}
+		
 	    return new LinkedList<String>();
 	}
 	
