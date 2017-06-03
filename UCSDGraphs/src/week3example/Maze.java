@@ -163,58 +163,58 @@ public class Maze {
 	 * @return the path from starting position to ending position, or
 	 * an empty list if there is no path.
 	 */
-	public List<MazeNode> dfs(int startRow, int startCol, int endRow, int endCol) {
-		
-		// Initialize everything
-		MazeNode start = cells[startRow][startCol];
-		MazeNode goal = cells[endRow][endCol];
-
-		if (start == null || goal == null) {
-			System.out.println("Start or goal node is null!  No path exists.");
-			return new LinkedList<MazeNode>();
-		}
-
-		HashMap<MazeNode, MazeNode> parentMap = new HashMap<MazeNode, MazeNode>();
-		
-		HashSet<MazeNode> visited = new HashSet<MazeNode>();
-		Stack<MazeNode> toExplore = new Stack<MazeNode>();
-		toExplore.push(start);
-		boolean found = false;
-
-		// Do the search
-		while (!toExplore.empty()) {
-			MazeNode curr = toExplore.pop();
-			if (curr == goal) {
-				found = true;
-				break;
-			}
-			List<MazeNode> neighbors = curr.getNeighbors();
-			ListIterator<MazeNode> it = neighbors.listIterator(neighbors.size());
-			while (it.hasPrevious()) {
-				MazeNode next = it.previous();
-				if (!visited.contains(next)) {
-					visited.add(next);
-					parentMap.put(next, curr);
-					toExplore.push(next);
-				}
-			}
-		}
-		
-		if (!found) {
-			System.out.println("No path exists");
-			return new LinkedList<MazeNode>();
-		}
-
-		// reconstruct the path
-		LinkedList<MazeNode> path = new LinkedList<MazeNode>();
-		MazeNode curr = goal;
-		while (curr != start) {
-			path.addFirst(curr);
-			curr = parentMap.get(curr);
-		}
-		path.addFirst(start);
-		return path;
-	}
+//	public List<MazeNode> dfs(int startRow, int startCol, int endRow, int endCol) {
+//		
+//		// Initialize everything
+//		MazeNode start = cells[startRow][startCol];
+//		MazeNode goal = cells[endRow][endCol];
+//
+//		if (start == null || goal == null) {
+//			System.out.println("Start or goal node is null!  No path exists.");
+//			return new LinkedList<MazeNode>();
+//		}
+//
+//		HashMap<MazeNode, MazeNode> parentMap = new HashMap<MazeNode, MazeNode>();
+//		
+//		HashSet<MazeNode> visited = new HashSet<MazeNode>();
+//		Stack<MazeNode> toExplore = new Stack<MazeNode>();
+//		toExplore.push(start);
+//		boolean found = false;
+//
+//		// Do the search
+//		while (!toExplore.empty()) {
+//			MazeNode curr = toExplore.pop();
+//			if (curr == goal) {
+//				found = true;
+//				break;
+//			}
+//			List<MazeNode> neighbors = curr.getNeighbors();
+//			ListIterator<MazeNode> it = neighbors.listIterator(neighbors.size());
+//			while (it.hasPrevious()) {
+//				MazeNode next = it.previous();
+//				if (!visited.contains(next)) {
+//					visited.add(next);
+//					parentMap.put(next, curr);
+//					toExplore.push(next);
+//				}
+//			}
+//		}
+//		
+//		if (!found) {
+//			System.out.println("No path exists");
+//			return new LinkedList<MazeNode>();
+//		}
+//
+//		// reconstruct the path
+//		LinkedList<MazeNode> path = new LinkedList<MazeNode>();
+//		MazeNode curr = goal;
+//		while (curr != start) {
+//			path.addFirst(curr);
+//			curr = parentMap.get(curr);
+//		}
+//		path.addFirst(start);
+//		return path;
+//	}
 	
 	
 	/** breadth first search from (startRow,startCol) to (endRow,endCol)
@@ -275,7 +275,7 @@ public class Maze {
 		return path;
 	}
 
-/*	public List<MazeNode> dfsRefactored(int startRow, int startCol, 
+	public List<MazeNode> dfs(int startRow, int startCol, 
 										int endRow, int endCol) {
 		// Initialize
 		MazeNode start = cells[startRow][startCol];
@@ -337,7 +337,7 @@ public class Maze {
 		return path;
 	}
 
-*/
+
 	public static void main(String[] args) {
 		String mazeFile = "data/mazes/maze1.maze";
 		Maze maze = new Maze();

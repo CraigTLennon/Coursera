@@ -109,6 +109,9 @@ public abstract class Graph {
 	 * @return List of indices of all vertices that are adjacent to v
 	 * 	via incoming edges to v. 
 	 */
+	//The out neighbors are those in the row of vertex v, and the in neighbors are those in the column of vertex v
+	//For the list representation, the out degree is hte number of elements in the list of a vertex, and the in degree is the number of vertices which contain 
+	//that vertex in a list
 	public abstract List<Integer> getInNeighbors(int v);
 	
 	
@@ -116,13 +119,20 @@ public abstract class Graph {
 	/** 
 	 * The degree sequence of a graph is a sorted (organized in numerical order 
 	 * from largest to smallest, possibly with repetitions) list of the degrees 
-	 * of the vertices in the graph.
+	 * of the vertices in the graph.  
 	 * 
 	 * @return The degree sequence of this graph.
 	 */
 	public List<Integer> degreeSequence() {
-		// XXX: Implement in part 1 of week 2
-		return null;
+		ArrayList<Integer> degreeSeq= new ArrayList<Integer>();
+		for(int key=0; key<numVertices;key++){
+						
+			int outDegree = getNeighbors(key).size();
+			int inDegree = getInNeighbors(key).size();
+			degreeSeq.add(outDegree+inDegree);
+		}
+		Collections.sort(degreeSeq);
+		return degreeSeq;
 	}
 	
 	/**
@@ -263,7 +273,21 @@ public abstract class Graph {
 		System.out.println("Testing distance-two methods on sample graphs...");
 		System.out.println("Goal: implement method using two approaches.");
 
-
+		GraphAdjList GL = new GraphAdjList();
+		GL.addVertex();
+		GL.addVertex();
+		GL.addVertex();
+		GL.addVertex();
+		GL.addVertex();
+		GL.addEdge(0, 1);
+		GL.addEdge(1, 2);
+		GL.addEdge(1, 3);
+		GL.addEdge(0, 4);
+		GL.addEdge(4, 0);
+		for( int g : GL.degreeSequence()){System.out.print(" "+g+", ");}
+		System.out.println("");
+		for( int g : GL.getDistance2(0) ){System.out.print(" "+g+", ");}
+		
 		
 	}
 }

@@ -1,5 +1,6 @@
 package basicgraph;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,25 @@ public class GraphAdjMatrix extends Graph {
 	 * If need to increase dimensions of matrix, double them
 	 * to amortize cost. 
 	 */
+	
+	private int[][] squareMatrix(int[][] matrix){
+		int row=Array.getLength(matrix);
+		int col=Array.getLength(matrix[0]);
+		int[][] product =new  int[row][col];
+		for(int r=0;r<row;r++){
+			for(int c = 0; c<col;c++){
+				int accum=0;
+				for(int i=0;i<getNumVertices();i++){
+					accum +=matrix[r][i]*matrix[i][c];
+				}
+				product[r][c]=accum;
+			}
+		}
+		
+		
+		return product;
+	}
+	
 	public void implementAddVertex() {
 		int v = getNumVertices();
 		if (v >= adjMatrix.length) {
@@ -88,7 +108,7 @@ public class GraphAdjMatrix extends Graph {
 	public List<Integer> getInNeighbors(int v) {
 		List<Integer> inNeighbors = new ArrayList<Integer>();
 		for (int i = 0; i < getNumVertices(); i ++) {
-			for (int j=0; j< adjMatrix[i][v]; j++) {
+			for (int j=0; j< adjMatrix[i][v]; j++) { //bc could be multiple edges
 				inNeighbors.add(i);
 			}
 		}
@@ -104,8 +124,14 @@ public class GraphAdjMatrix extends Graph {
 	 * @return List<Integer> a list of indices of vertices.  
 	 */	
 	public List<Integer> getDistance2(int v) {
-		// XXX Implement this method in week 2
-		return null;
+		int[][] step2Matrix=squareMatrix(adjMatrix);		
+		List<Integer> twoNeighbors = new ArrayList<Integer>();
+		for (int i = 0; i < getNumVertices(); i ++) {
+			for (int j=0; j< step2Matrix[v][i]; j ++) {
+				twoNeighbors.add(i);
+			}
+		}
+		return twoNeighbors;	
 	}
 	
 	/**

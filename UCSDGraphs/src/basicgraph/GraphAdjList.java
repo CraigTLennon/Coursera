@@ -57,10 +57,10 @@ public class GraphAdjList extends Graph {
 	 * @param v the index of vertex.
 	 * @return List<Integer> a list of indices of vertices.  
 	 */	
+	
 	public List<Integer> getNeighbors(int v) {
 		return new ArrayList<Integer>(adjListsMap.get(v));
 	}
-
 	/** 
 	 * Implement the abstract method for finding all 
 	 * in-neighbors of a vertex.
@@ -95,8 +95,18 @@ public class GraphAdjList extends Graph {
 	 * @return List<Integer> a list of indices of vertices.  
 	 */		
 	 public List<Integer> getDistance2(int v) {
-		 // XXX: Implement this method in week 2
-		 return null;
+		 List<Integer> outNeighbors=getNeighbors(v);
+		 ArrayList<Integer> step2Neighbors= new ArrayList<Integer>();
+		 for(int n :outNeighbors){
+			 List<Integer> nNeighbors=getNeighbors(n);
+			 for(int nextN : nNeighbors){
+				 if(!step2Neighbors.contains(nextN)){
+					 step2Neighbors.add(nextN);
+				 }
+			 }
+		 }
+		 
+		 return step2Neighbors;
 	}
 	
 	/**

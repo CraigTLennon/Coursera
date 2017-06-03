@@ -24,14 +24,12 @@ public class MazeNode {
 	public static final char PATH = 'o';
 	public static final char START = 'S';
 	public static final char GOAL = 'G';
-
 	/**
 	 * @return the displayChar
 	 */
-	public char getDisplayChar() {
+	public char getDisplayChar(){
 		return displayChar;
 	}
-
 	/**
 	 * @param displayChar the displayChar to set
 	 */
