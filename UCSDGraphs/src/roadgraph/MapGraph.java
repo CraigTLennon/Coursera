@@ -30,6 +30,12 @@ public class MapGraph {
 		private HashSet<MapEdge> edges;
 
 		
+		private void resetDistances(){
+			for(MapNode mp:pointNodeMap.values()){
+				mp.setDistance(Double.POSITIVE_INFINITY);
+			}
+		}
+		
 		/** 
 		 * Create a new empty MapGraph 
 		 */
@@ -249,6 +255,7 @@ public class MapGraph {
 		 *   start to goal (including both start and goal).
 		 */
 		public List<GeographicPoint> dijkstra(GeographicPoint start, GeographicPoint goal) {
+			this.resetDistances();
 			// Dummy variable for calling the search algorithms
 			// You do not need to change this method.
 	        Consumer<GeographicPoint> temp = (x) -> {};
@@ -310,6 +317,7 @@ public class MapGraph {
 		 *   start to goal (including both start and goal).
 		 */
 		public List<GeographicPoint> aStarSearch(GeographicPoint start, GeographicPoint goal) {
+			this.resetDistances();
 			// Dummy variable for calling the search algorithms
 	        Consumer<GeographicPoint> temp = (x) -> {};
 	        return aStarSearch(start, goal, temp);
@@ -326,10 +334,40 @@ public class MapGraph {
 		public List<GeographicPoint> aStarSearch(GeographicPoint start, 
 												 GeographicPoint goal, Consumer<GeographicPoint> nodeSearched)
 		{
-			// TODO: Implement this method in WEEK 3
+			MapNode startNode = pointNodeMap.get(start);
+			startNode.setDistance(0.0);
+			MapNode goalNode = pointNodeMap.get(goal);
 			
+			HashSet<MapNode> visited = new HashSet<MapNode>();
+			HashMap<MapNode,MapNode> parentMap = new HashMap<MapNode,MapNode>(); 
+			PriorityQueue<MapNode> pq = new PriorityQueue<MapNode>(1,new astarCompNode(goalNode));
+			pq.add(startNode);
+			
+			while(!pq.isEmpty()){
+				MapNode next = pq.remove();
+				System.out.println("next is " +next );
+				if(!visited.contains(next)){
+					visited.add(next);
+					if(next.equals(goalNode)) return reconstructPath(parentMap,startNode,goalNode);
+					
+					Set<MapNode> neighbors = next.getNeighbors().stream().filter(x->!visited.contains(x)).collect(Collectors.toSet());
+					for(MapNode n : neighbors){
+						double distance = next.getDistance()+n.distanceFrom(next);
+						if(distance<n.getDistance()){
+							n.setDistance(distance);
+							parentMap.put(n, next);
+							pq.add(n);
+							System.out.println("added "+n.toString()+" cost "+n.getDistance());
+							
+						}
+					}
+				}
+			
+			
+
 			// Hook for visualization.  See writeup.
-			//nodeSearched.accept(next.getLocation());
+			 nodeSearched.accept(next.getLocation());
+			}
 			
 			return null;
 		}
@@ -353,9 +391,13 @@ public class MapGraph {
 
 			System.out.println("Test 1 using simpletest: Dijkstra should be 9 and AStar should be 5");
 			List<GeographicPoint> testroute = simpleTestMap.dijkstra(testStart,testEnd);
-//			List<GeographicPoint> testroute2 = simpleTestMap.aStarSearch(testStart,testEnd);
-			System.out.println("findished");
 			for(GeographicPoint g : testroute){
+				System.out.println(g);
+			}
+			System.out.println("Now for astar");
+			List<GeographicPoint> testroute2 = simpleTestMap.aStarSearch(testStart,testEnd);
+			System.out.println("findished");
+			for(GeographicPoint g : testroute2){
 				System.out.println(g);
 			}
 		}		

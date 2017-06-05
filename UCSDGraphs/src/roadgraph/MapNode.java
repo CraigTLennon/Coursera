@@ -27,6 +27,15 @@ public class MapNode {
 		return distance;
 	}
 
+	public double getAStarDistance(MapNode other){
+		return distance + this.straightLineDistance(other);
+	}
+	
+	public double straightLineDistance(MapNode other){
+		return this.location.distance(other.location);
+	}
+	
+	
 	public double distanceFrom(MapNode other){
 		Set<MapNode> neigh = this.getNeighbors();
 		
