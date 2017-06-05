@@ -7,8 +7,15 @@ public class Edge {
 	private GeographicPoint from,to; 
 	private String roadName,roadType;
 	private double length;
+	private double fromStartLength; // distance from start to the "to" of this edge
 	public GeographicPoint getFrom() {
 		return from;
+	}
+	public double totalDistance(){
+		return fromStartLength;
+	}
+	public void setTotalDistance(double d){
+		fromStartLength=d;
 	}
 	public void setFrom(GeographicPoint from) {
 		this.from = from;
@@ -19,6 +26,7 @@ public class Edge {
 	public void setTo(GeographicPoint to) {
 		this.to = to;
 	}
+	 
 	public String getRoadName() {
 		return roadName;
 	}
@@ -49,8 +57,14 @@ public class Edge {
 		this.roadName = roadName;
 		this.roadType = roadType;
 		this.length = length;
+		this.fromStartLength=Double.POSITIVE_INFINITY;
 	}
-	
+	public int hashCode(){
+		return this.toString().hashCode();
+	}
+	public boolean equals(Edge other){
+		return this.toString().equals(other.toString());
+	}
 
 	
 }
